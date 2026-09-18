@@ -82,17 +82,17 @@ GitHub 저장소 → **Settings → Branches → Add branch ruleset (또는 Add 
 
 각 이슈는 GitHub Issue로 생성하고, 해당 PR 본문에 `Closes #번호`를 반드시 포함합니다.
 
-| # | 제목 | 담당 | 브랜치 |
+| 이슈 | 제목 | 담당 | 브랜치 |
 |---|---|---|---|
-| 1 | `[chore] Branch protection 설정` | 정인호 | `feature/inho-branch-protection` |
-| 2 | `[docs] CONTRIBUTING.md 작성` | 정인호 | `feature/inho-contributing` |
-| 3 | `[feat] utils.py 리스트 유틸 함수 추가` | 정인호 | `feature/inho-list-utils` |
-| 4 | `[feat] utils.py 문자열 유틸 함수 추가` | 이교원 | `feature/gyowon-string-utils` |
-| 5 | `[feat] utils.py 숫자 유틸 함수 추가` | 박기태 | `feature/gitae-math-utils` |
-| 6 | `[refactor] utils.py를 string_utils.py로 분리` | 박기태 | `feature/gitae-split-utils` |
-| 7 | `[docs] conflict-resolution.md 기록` | 이교원 | `feature/gyowon-conflict-doc` |
-| 8 | `[docs] troubleshooting-log.md 기록` | 전원 (정인호 취합) | `feature/inho-troubleshooting-doc` |
-| 9 | `[docs] SUBMISSION.md 인덱스 작성` | 정인호 | `feature/inho-submission` |
+| [#4](https://github.com/B2-2-Cody/git-collab-mission/issues/4) | `[chore] Branch protection 설정` | 정인호 | `feature/inho-branch-protection` |
+| [#5](https://github.com/B2-2-Cody/git-collab-mission/issues/5) | `[docs] CONTRIBUTING.md 작성` | 정인호 | `feature/inho-contributing` |
+| [#6](https://github.com/B2-2-Cody/git-collab-mission/issues/6) | `[feat] utils.py 리스트 유틸 함수 추가` | 정인호 | `feature/inho-list-utils` |
+| [#7](https://github.com/B2-2-Cody/git-collab-mission/issues/7) | `[feat] utils.py 문자열 유틸 함수 추가` | 이교원 | `feature/gyowon-string-utils` |
+| [#8](https://github.com/B2-2-Cody/git-collab-mission/issues/8) | `[feat] utils.py 숫자 유틸 함수 추가` | 박기태 | `feature/gitae-math-utils` |
+| [#9](https://github.com/B2-2-Cody/git-collab-mission/issues/9) | `[refactor] utils.py를 string_utils.py로 분리` | 박기태 | `feature/gitae-split-utils` |
+| [#10](https://github.com/B2-2-Cody/git-collab-mission/issues/10) | `[docs] conflict-resolution.md 기록` | 이교원 | `feature/gyowon-conflict-doc` |
+| [#11](https://github.com/B2-2-Cody/git-collab-mission/issues/11) | `[docs] troubleshooting-log.md 기록` | 전원 (정인호 취합) | `feature/inho-troubleshooting-doc` |
+| [#12](https://github.com/B2-2-Cody/git-collab-mission/issues/12) | `[docs] SUBMISSION.md 인덱스 작성` | 정인호 | `feature/inho-submission` |
 
 이 배정대로면 팀원별 병합 PR 개수: 정인호 4개, 이교원 2개, 박기태 2개 (모두 최소 기준 2개 이상 충족).
 
@@ -129,13 +129,13 @@ GitHub에서 PR 생성 시 아래 템플릿을 사용합니다.
 ## 8. 충돌 시나리오 (의도적으로 2회 유발)
 
 ### 충돌 #1 — 자명한 충돌 (같은 hunk)
-- 정인호(#3)와 이교원(#4)이 **같은 시점**에 `main`에서 각자 브랜치를 생성합니다.
+- 정인호(#6)와 이교원(#7)이 **같은 시점**에 `main`에서 각자 브랜치를 생성합니다.
 - 두 사람 모두 `src/utils.py` **파일 맨 끝**에 자기 함수를 추가합니다.
 - 정인호 PR을 먼저 머지 → 이교원 PR을 머지하려 하면 같은 줄(파일 끝)에서 충돌 발생.
 - 이교원이 로컬에서 `git pull origin main`(또는 `git merge main`) 후 충돌 마커를 직접 해결하고 push.
 
 ### 충돌 #2 — 비자명한 충돌 (파일 이동 vs 내용 수정)
-- 박기태(#6)가 `git mv src/utils.py src/string_utils.py`로 파일명을 바꾸는 브랜치를 작업하는 동안,
+- 박기태(#9)가 `git mv src/utils.py src/string_utils.py`로 파일명을 바꾸는 브랜치를 작업하는 동안,
 - 같은 시점에 다른 팀원(정인호 또는 이교원)이 `src/utils.py` **내용을 수정**하는 브랜치를 먼저 머지합니다.
 - 박기태가 나중에 머지하면 "파일이 이동됐는데 원본에 새 변경이 있다"는 rename/modify 충돌이 발생합니다.
 - `git status`로 상황 확인 후, 이동된 파일(`string_utils.py`)에 최신 변경 내용을 수동으로 반영해서 해결.
@@ -155,16 +155,17 @@ GitHub에서 PR 생성 시 아래 템플릿을 사용합니다.
 
 ## 10. 진행 순서 체크리스트
 
-- [ ] 1. Org 초대 + 팀원 로컬 clone
-- [ ] 2. 저장소 스캐폴드 + README(Why GitHub Flow) — *(정인호, 팀원 합류 전 진행 가능)*
-- [ ] 3. CONTRIBUTING.md 작성 (#2) — *(정인호, 팀원 합류 전 초안 가능)*
-- [ ] 4. Branch Protection 설정 (#1) — *(팀원 합류 후에만)*
-- [ ] 5. 이슈 #3~#9 생성
-- [ ] 6. 기능 PR 3개(#3,#4,#5) 진행 → 충돌 #1 발생/해결
-- [ ] 7. 리팩터 PR(#6) 진행 → 충돌 #2 발생/해결
-- [ ] 8. 트러블슈팅 4종 실습 + 로그 작성 (#8)
-- [ ] 9. conflict-resolution.md 마무리 (#7)
-- [ ] 10. SUBMISSION.md 최종 정리 (#9), 아래 11번 체크리스트로 자가 점검
+- [x] 1. 저장소 스캐폴드 + SCENARIO.md 작성 — *(정인호, PR #1)*
+- [x] 2. CONTRIBUTING.md 작성 (#5) — *(정인호, PR #2)*
+- [x] 3. conflict-resolution.md / troubleshooting-log.md 템플릿 준비 (#10, #11 선행 작업) — *(정인호, PR #3)*
+- [x] 4. 이슈 #4~#12 생성 — *(정인호)*
+- [ ] 5. Org 초대 + 팀원 로컬 clone
+- [ ] 6. Branch Protection 설정 (#4) — *(팀원 합류 후에만)*
+- [ ] 7. 기능 PR 3개(#6,#7,#8) 진행 → 충돌 #1 발생/해결
+- [ ] 8. 리팩터 PR(#9) 진행 → 충돌 #2 발생/해결
+- [ ] 9. 트러블슈팅 4종 실습 + 로그 작성 (#11)
+- [ ] 10. conflict-resolution.md 마무리 (#10)
+- [ ] 11. SUBMISSION.md 최종 정리 (#12), 아래 11번 체크리스트로 자가 점검
 
 ## 11. 평가문항 자가 점검
 
