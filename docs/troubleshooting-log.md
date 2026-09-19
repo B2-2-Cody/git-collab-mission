@@ -66,17 +66,30 @@ git status --short
 - 박기태
 
 ### 상황
-- TODO: 이미 원격(main)에 push된 커밋에서 발견한 문제(재현 가능하게 설명)
+- `main`에 병합된 유틸 코드를 기준으로 연습용 브랜치 `feature/gitae-revert-practice`를 만들고, `is_even`을 "간단히 정리"한다는 명목의 커밋 `ef03e8e`(`refactor: simplify is_even modulo check`)를 만듦. 이 커밋이 짝수 판별 조건을 `number % 2 == 0`에서 `number % 2 == 1`로 뒤집어 버려 `is_even` 테스트 3개가 실패함.
+- 이 커밋이 이미 원격에 push되어 팀원이 받아간 상태라고 가정하고(실제 `main`을 망가뜨리지 않도록 연습용 브랜치에서 재현), 히스토리를 고쳐 쓰지 않고 되돌려야 하는 상황을 만듦.
 
 ### 시도한 명령/절차
-- TODO (예: `git revert <commit-sha>`)
+```bash
+git checkout -b feature/gitae-revert-practice origin/main
+# is_even 조건을 잘못 바꾼 커밋 생성
+git commit -m "refactor: simplify is_even modulo check"   # ef03e8e
+# 테스트 실행 -> 16개 중 3개 실패 (test_is_even_*)
+
+git revert --no-commit ef03e8e
+git commit -m 'Revert "refactor: simplify is_even modulo check"'   # df3cdc9
+# 테스트 재실행 -> 16개 모두 통과
+git diff origin/main --stat   # 출력 없음: 코드가 origin/main과 동일
+```
 
 ### 결과
-- TODO: 히스토리를 유지한 채 되돌린 결과
-- TODO: 주의할 점(원격 히스토리/협업에 미치는 영향)
+- 문제 커밋 `ef03e8e`는 히스토리에 그대로 남고, 그 변경을 정확히 반대로 적용하는 새 커밋 `df3cdc9`가 위에 쌓임. `is_even`이 원래대로 복구되어 테스트 16개가 모두 통과하고, 코드는 `origin/main`과 완전히 같아짐.
+- 히스토리가 삭제·재작성되지 않았으므로 이미 이 커밋을 받아간 팀원은 `git pull`만 하면 되고 `--force`가 필요 없음.
+- 주의할 점: revert는 "취소 커밋"을 새로 만들 뿐 원래 커밋을 지우지 않으므로 히스토리에 문제 커밋과 되돌림 커밋이 둘 다 남는다. 병합 커밋을 revert할 때는 `-m <부모 번호>`로 어느 부모 쪽으로 되돌릴지 지정해야 하고, 이후 같은 변경을 다시 병합하려면 revert 자체를 다시 revert해야 한다.
+- 이 기록은 실제 `main`이 아니라 연습용 브랜치에서 수행한 실습이며, 커밋 해시(`ef03e8e`, `df3cdc9`)는 해당 브랜치에서 확인할 수 있다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO: reset 대신 revert를 선택한 이유(이미 공유된 히스토리를 재작성하지 않기 위해 등)
+- `git reset`은 히스토리를 되감아 원격과 어긋나게 만들어 `--force` push가 필요해지는데, 이미 공유된 커밋에는 팀원의 로컬 히스토리와 충돌할 수 있어 쓰면 안 된다. `git revert`는 되돌림 자체를 새 커밋으로 남겨 공유된 히스토리를 그대로 두고, 무엇을 왜 되돌렸는지도 기록으로 남는다.
 
 ---
 
