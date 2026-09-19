@@ -16,7 +16,7 @@
 
 ### 충돌 내용(Conflict markers)
 ```txt
-    <<<<<<< HEAD
+<<<<<<< HEAD
 def reverse_string(value: str) -> str:
     """문자열의 문자 순서를 뒤집어 반환한다.
 
@@ -36,7 +36,7 @@ def is_palindrome(value: str) -> bool:
     """
     normalized = value.replace(" ", "").lower()
     return normalized == normalized[::-1]
-    =======
+=======
 def flatten(nested):
     """중첩 리스트를 1단계 평탄화한다."""
     result = []
@@ -57,7 +57,7 @@ def unique(items):
             seen.add(item)
             result.append(item)
     return result
-    >>>>>>> origin/main
+>>>>>>> origin/main
 ```
 
 ### 해결 과정(How)
