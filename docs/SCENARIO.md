@@ -158,17 +158,17 @@ GitHub에서 PR 생성 시 아래 템플릿을 사용합니다.
 
 > 체크(`[x]`)는 **PR이 main에 병합됐거나 GitHub 설정이 실제로 반영된 경우**에만 표시합니다. 문서 초안이 작성되어 PR이 열린 것만으로는 체크하지 않고 `(draft, 병합 대기)`로 표시합니다.
 
-- [ ] 1. 저장소 스캐폴드 + SCENARIO.md 작성 (#14) — *(정인호, PR #1 — draft, 병합 대기)*
-- [ ] 2. CONTRIBUTING.md 작성 (#5) — *(정인호, PR #2 — draft, 병합 대기)*
-- [ ] 3. conflict-resolution.md / troubleshooting-log.md 템플릿 준비 (#10, #11 선행 작업) — *(정인호, PR #3 — draft, 병합 대기)*
-- [x] 4. 이슈 #4~#12 생성 — *(정인호, 완료)*
-- [x] 5. Org 초대 — *(kyowon1108, SeouliteParker 합류 완료, maintain 권한 확인; 팀원 로컬 clone 여부는 각자 확인 필요)*
+- [x] 1. 저장소 스캐폴드 + SCENARIO.md 작성 (#14) — *(정인호, PR #1 병합됨)*
+- [x] 2. CONTRIBUTING.md 작성 (#5) — *(정인호, PR #2 병합됨)*
+- [x] 3. conflict-resolution.md / troubleshooting-log.md 템플릿 준비 (#10, #11 선행 작업) — *(정인호, PR #3 병합됨)*
+- [x] 4. 이슈 #4~#12, #14, #18 생성 — *(정인호, 완료)*
+- [x] 5. Org 초대 — *(kyowon1108, SeouliteParker 합류 완료, maintain 권한 확인)*
 - [x] 6. Branch Protection 설정 (#4) — *(완료, 이슈 close 처리됨)*
-- [ ] 7. 기능 PR 3개(#6,#7,#8) 진행 → 충돌 #1 발생/해결
-- [ ] 8. 리팩터 PR(#9) 진행 → 충돌 #2 발생/해결
-- [ ] 9. 트러블슈팅 4종 실습 + 로그 작성 (#11)
-- [ ] 10. conflict-resolution.md 마무리 (#10)
-- [ ] 11. SUBMISSION.md 최종 정리 (#12), 아래 11번 체크리스트로 자가 점검
+- [x] 7. 기능 PR 3개(#6 PR #15, #7 PR #16, #8 PR #17) 진행 → 충돌 #1(add/add) 발생·해결 (PR #16 커밋 `2799131`)
+- [x] 8. 리팩터 PR(#9 PR #20) 진행 → 충돌 #2(rename/modify) 발생·해결 (PR #19 + PR #20)
+- [x] 9. 트러블슈팅 4종 실습 + 로그 작성 (#11 PR #22) — 전원 참여 완료
+- [x] 10. conflict-resolution.md 마무리 (#10 PR #21) — 충돌 #1·#2 기록 완료
+- [x] 11. SUBMISSION.md 최종 정리 (#12), 아래 11번 체크리스트로 자가 점검 — Member PRs/Reviews/Evidence 전부 실제 링크로 채움
 
 ## 11. 평가문항 자가 점검
 
