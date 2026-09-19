@@ -2,7 +2,7 @@
 
 import pytest
 
-from src import utils
+from src import string_utils as utils
 
 
 def test_clamp_when_value_is_above_range() -> None:

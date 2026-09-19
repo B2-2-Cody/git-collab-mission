@@ -1,6 +1,6 @@
 """문자열 유틸 함수 테스트."""
 
-from src import utils
+from src import string_utils as utils
 
 
 def test_reverse_string_when_given_text() -> None:
