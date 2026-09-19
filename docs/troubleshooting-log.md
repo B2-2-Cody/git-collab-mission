@@ -73,14 +73,20 @@ git commit --amend -m "docs: document amend troubleshooting scenario"
 - 정인호
 
 ### 상황
-- TODO: 작업 중 급하게 다른 브랜치로 전환해야 했던 상황(재현 가능하게 설명)
+- 이 stash 구간을 작성하던 중, `main`에 PR #21(충돌 기록 문서)이 이미 머지됐는지 급히 확인해야 했음. 커밋하지 않은 채로 `main`으로 전환하면 편집 중이던 내용이 `main`에 그대로 남아 있는 상태로 보이거나 충돌할 위험이 있어 stash가 필요했음.
 
 ### 시도한 명령/절차
-- TODO (예: `git stash`, 브랜치 전환 후 작업, `git checkout` 복귀, `git stash pop`)
+```bash
+git stash push -m "wip: troubleshooting-log stash section"
+git checkout main
+git log --oneline -1   # PR #21 머지 여부 확인
+git checkout feature/inho-troubleshooting-doc
+git stash pop
+```
 
 ### 결과
-- TODO: 임시 보관한 작업을 안전하게 복귀시킨 과정
-- TODO: 주의할 점(스태시 충돌 가능성 등)
+- `git stash push`로 작업 중이던 변경 내용이 스택에 안전하게 보관되고, working tree는 마지막 커밋 상태로 깨끗해짐. `main`으로 전환해 확인 작업을 마친 뒤 원래 브랜치로 돌아와 `git stash pop`으로 변경 내용을 그대로 복원함.
+- 주의할 점: stash한 파일과 복귀 후 브랜치의 파일이 같은 부분을 건드리면 pop 시 충돌이 날 수 있다. 또한 `git stash` 대신 `git stash pop` 없이 `git stash apply`를 쓰면 스택에 항목이 남아 나중에 헷갈릴 수 있어, 복원 후에는 `git stash list`로 남은 항목이 없는지 확인하는 습관이 필요하다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- 커밋하기엔 아직 미완성인 변경을 임시로 치워두고 다른 브랜치를 확인해야 하는 상황이라, 불필요한 WIP 커밋을 남기지 않고 작업 상태를 그대로 보존할 수 있는 `stash`가 가장 적합했다.
