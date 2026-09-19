@@ -34,10 +34,12 @@ def reverse_string(value: str) -> str:
 
 
 def is_palindrome(value: str) -> bool:
-    """공백과 대소문자를 무시하고 회문 여부를 반환한다.
+    """일반 공백과 대소문자만 무시하고 회문 여부를 반환한다.
+
+    문장부호와 탭, 줄바꿈은 비교 대상에 포함한다.
 
     Example:
-        >>> is_palindrome("Never odd or even")
+        >>> is_palindrome("RaceCar")
         True
     """
     normalized = value.replace(" ", "").lower()

@@ -15,10 +15,22 @@ def test_reverse_string_when_given_text() -> None:
     assert result == "yessydoC"
 
 
-def test_is_palindrome_when_spaces_and_case_differ() -> None:
-    """공백과 대소문자를 무시해 회문을 판별한다."""
+def test_is_palindrome_when_case_differs() -> None:
+    """대소문자를 무시해 회문을 판별한다."""
     # Given
-    value = "Never odd or even"
+    value = "RaceCar"
+
+    # When
+    result = utils.is_palindrome(value)
+
+    # Then
+    assert result is True
+
+
+def test_is_palindrome_when_spaces_are_present() -> None:
+    """일반 공백을 무시해 회문을 판별한다."""
+    # Given
+    value = "nurses run"
 
     # When
     result = utils.is_palindrome(value)
