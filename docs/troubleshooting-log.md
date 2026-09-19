@@ -9,17 +9,21 @@
 - 정인호
 
 ### 상황
-- TODO: 방금 커밋한 메시지에서 발견한 문제(예: 오타, 누락된 내용)를 재현 가능하게 설명
+- 이 문서(`docs/troubleshooting-log.md`)의 amend 구간을 채우고 아직 `git push`하기 전에, 방금 로컬에 만든 커밋 메시지에 오타(`dcument`)가 있는 걸 발견함. 아직 원격에 올라가지 않은 커밋이라 안전하게 고칠 수 있는 상황.
 
 ### 시도한 명령/절차
-- TODO (예: `git commit --amend -m "..."`)
+```bash
+git commit -m "docs: dcument amend troubleshooting scenario"
+# 커밋 직후 메시지 오타 발견 (dcument -> document), 아직 push 전이므로 amend로 수정
+git commit --amend -m "docs: document amend troubleshooting scenario"
+```
 
 ### 결과
-- TODO: 무엇이 어떻게 해결됐는지
-- TODO: 주의할 점(이미 push된 커밋을 amend하면 원격 히스토리와 어긋난다는 점 등)
+- `git commit --amend`는 방금 만든 커밋을 새 커밋으로 교체한다 — 해시가 바뀌지만(오타 커밋 `96bcd3d` → 수정 커밋 `b13e20c`), 파일 변경 내용은 그대로 유지된 채 메시지만 고쳐짐.
+- 주의할 점: 아직 push하지 않은 로컬 커밋에서만 안전하다. 이미 push되어 다른 사람이 pull 받은 커밋을 amend하면 해시가 바뀌어 원격/로컬 히스토리가 어긋나고, 이후 `git push --force`가 필요해진다 — 공유 브랜치에서는 지양해야 함.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- `git reset --soft`로 커밋을 풀었다가 새로 커밋해도 되지만, 메시지만 고치는 단순한 경우엔 `--amend`가 한 줄로 끝나 더 직관적이다. 아직 아무도 이 커밋을 받아가지 않은 로컬 전용 상태였기 때문에 안전 조건도 충족했다.
 
 ---
 
@@ -29,17 +33,30 @@
 - 이교원
 
 ### 상황
-- TODO: 로컬에서 실수로 만든 커밋 상황(재현 가능하게 설명)
+- `feature/kyowon-string-utils`에서 문자열 함수와 테스트를 작성한 뒤, 잘못된 로컬 커밋을 취소하는 상황을 재현하기 위해 임시 커밋을 생성함.
+- 임시 커밋 메시지는 `wip: temporary string utils commit`, 커밋 해시는 `f95d8d1`이었으며 원격에 push하기 전이었음.
 
 ### 시도한 명령/절차
-- TODO (예: `git reset --soft HEAD~1`)
+```bash
+git add src tests
+git commit -m "wip: temporary string utils commit"
+git log -1 --oneline
+# f95d8d1 wip: temporary string utils commit
+
+git reset --soft HEAD~1
+git status --short
+```
+- `reset --soft` 직후 커밋만 취소되고 `src/__init__.py`, `src/utils.py`, `tests/test_utils.py` 등 변경 내용이 staged 상태로 남아 있는 것을 확인함.
+- 테스트 실행 중 생성돼 함께 staged된 `__pycache__` 파일은 스테이징에서 제외하고 삭제한 뒤 정상 커밋을 다시 생성함.
 
 ### 결과
-- TODO: 커밋은 취소되고 변경 내용은 스테이징 상태로 유지됨을 확인한 과정
-- TODO: 주의할 점(이미 push된 커밋에는 사용하면 안 되는 이유 등)
+- 임시 커밋 `f95d8d1`은 현재 브랜치 히스토리에서 제거됐지만, 작성한 문자열 함수와 테스트는 삭제되지 않고 staged 상태로 유지됨.
+- 불필요한 캐시 파일을 정리한 뒤 `feat: add string utilities to utils.py` 메시지로 정상 커밋 `3c46886`을 생성하고 PR #16으로 병합함.
+- 관련 PR: [PR #16](https://github.com/B2-2-Cody/git-collab-mission/pull/16)
+- 주의할 점: `reset --soft`는 커밋만 되돌리고 변경과 staging 상태를 유지한다. 이미 원격에 push해 팀원과 공유한 커밋을 reset하면 히스토리가 어긋나므로, 공유된 커밋 취소에는 `git revert`를 사용해야 한다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- 아직 원격에 push하지 않은 로컬 커밋이었고, 코드와 staging 상태를 보존하면서 커밋 메시지와 포함 파일을 다시 정리해야 했기 때문에 `reset --soft`를 선택함.
 
 ---
 
@@ -49,17 +66,30 @@
 - 박기태
 
 ### 상황
-- TODO: 이미 원격(main)에 push된 커밋에서 발견한 문제(재현 가능하게 설명)
+- `main`에 병합된 유틸 코드를 기준으로 연습용 브랜치 `feature/gitae-revert-practice`를 만들고, `is_even`을 "간단히 정리"한다는 명목의 커밋 `ef03e8e`(`refactor: simplify is_even modulo check`)를 만듦. 이 커밋이 짝수 판별 조건을 `number % 2 == 0`에서 `number % 2 == 1`로 뒤집어 버려 `is_even` 테스트 3개가 실패함.
+- 이 커밋이 이미 원격에 push되어 팀원이 받아간 상태라고 가정하고(실제 `main`을 망가뜨리지 않도록 연습용 브랜치에서 재현), 히스토리를 고쳐 쓰지 않고 되돌려야 하는 상황을 만듦.
 
 ### 시도한 명령/절차
-- TODO (예: `git revert <commit-sha>`)
+```bash
+git checkout -b feature/gitae-revert-practice origin/main
+# is_even 조건을 잘못 바꾼 커밋 생성
+git commit -m "refactor: simplify is_even modulo check"   # ef03e8e
+# 테스트 실행 -> 16개 중 3개 실패 (test_is_even_*)
+
+git revert --no-commit ef03e8e
+git commit -m 'Revert "refactor: simplify is_even modulo check"'   # df3cdc9
+# 테스트 재실행 -> 16개 모두 통과
+git diff origin/main --stat   # 출력 없음: 코드가 origin/main과 동일
+```
 
 ### 결과
-- TODO: 히스토리를 유지한 채 되돌린 결과
-- TODO: 주의할 점(원격 히스토리/협업에 미치는 영향)
+- 문제 커밋 `ef03e8e`는 히스토리에 그대로 남고, 그 변경을 정확히 반대로 적용하는 새 커밋 `df3cdc9`가 위에 쌓임. `is_even`이 원래대로 복구되어 테스트 16개가 모두 통과하고, 코드는 `origin/main`과 완전히 같아짐.
+- 히스토리가 삭제·재작성되지 않았으므로 이미 이 커밋을 받아간 팀원은 `git pull`만 하면 되고 `--force`가 필요 없음.
+- 주의할 점: revert는 "취소 커밋"을 새로 만들 뿐 원래 커밋을 지우지 않으므로 히스토리에 문제 커밋과 되돌림 커밋이 둘 다 남는다. 병합 커밋을 revert할 때는 `-m <부모 번호>`로 어느 부모 쪽으로 되돌릴지 지정해야 하고, 이후 같은 변경을 다시 병합하려면 revert 자체를 다시 revert해야 한다.
+- 이 기록은 실제 `main`이 아니라 연습용 브랜치에서 수행한 실습이며, 커밋 해시(`ef03e8e`, `df3cdc9`)는 해당 브랜치에서 확인할 수 있다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO: reset 대신 revert를 선택한 이유(이미 공유된 히스토리를 재작성하지 않기 위해 등)
+- `git reset`은 히스토리를 되감아 원격과 어긋나게 만들어 `--force` push가 필요해지는데, 이미 공유된 커밋에는 팀원의 로컬 히스토리와 충돌할 수 있어 쓰면 안 된다. `git revert`는 되돌림 자체를 새 커밋으로 남겨 공유된 히스토리를 그대로 두고, 무엇을 왜 되돌렸는지도 기록으로 남는다.
 
 ---
 
@@ -69,14 +99,20 @@
 - 정인호
 
 ### 상황
-- TODO: 작업 중 급하게 다른 브랜치로 전환해야 했던 상황(재현 가능하게 설명)
+- 이 stash 구간을 작성하던 중, `main`에 PR #21(충돌 기록 문서)이 이미 머지됐는지 급히 확인해야 했음. 커밋하지 않은 채로 `main`으로 전환하면 편집 중이던 내용이 `main`에 그대로 남아 있는 상태로 보이거나 충돌할 위험이 있어 stash가 필요했음.
 
 ### 시도한 명령/절차
-- TODO (예: `git stash`, 브랜치 전환 후 작업, `git checkout` 복귀, `git stash pop`)
+```bash
+git stash push -m "wip: troubleshooting-log stash section"
+git checkout main
+git log --oneline -1   # PR #21 머지 여부 확인
+git checkout feature/inho-troubleshooting-doc
+git stash pop
+```
 
 ### 결과
-- TODO: 임시 보관한 작업을 안전하게 복귀시킨 과정
-- TODO: 주의할 점(스태시 충돌 가능성 등)
+- `git stash push`로 작업 중이던 변경 내용이 스택에 안전하게 보관되고, working tree는 마지막 커밋 상태로 깨끗해짐. `main`으로 전환해 확인 작업을 마친 뒤 원래 브랜치로 돌아와 `git stash pop`으로 변경 내용을 그대로 복원함.
+- 주의할 점: stash한 파일과 복귀 후 브랜치의 파일이 같은 부분을 건드리면 pop 시 충돌이 날 수 있다. 또한 `git stash` 대신 `git stash pop` 없이 `git stash apply`를 쓰면 스택에 항목이 남아 나중에 헷갈릴 수 있어, 복원 후에는 `git stash list`로 남은 항목이 없는지 확인하는 습관이 필요하다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- 커밋하기엔 아직 미완성인 변경을 임시로 치워두고 다른 브랜치를 확인해야 하는 상황이라, 불필요한 WIP 커밋을 남기지 않고 작업 상태를 그대로 보존할 수 있는 `stash`가 가장 적합했다.
