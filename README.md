@@ -22,4 +22,4 @@ Codyssey B2-2 Github 협업 미션
 - [Submission Index](./SUBMISSION.md)
 
 ## Source
-- [`src/utils.py`](./src/utils.py) — 팀원별 유틸 함수 모음
+- [`src/string_utils.py`](./src/string_utils.py) — 팀원별 유틸 함수 모음
