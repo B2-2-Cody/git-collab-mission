@@ -20,10 +20,10 @@
 | 이름 | 브랜치 접두사 |
 |---|---|
 | 정인호 | `inho` |
-| 이교원 | `gyowon` |
+| 이교원 | `kyowon` |
 | 박기태 | `gitae` |
 
-예시: `feature/inho-list-utils`, `feature/gyowon-string-utils`, `feature/gitae-split-utils`
+예시: `feature/inho-list-utils`, `feature/kyowon-string-utils`, `feature/gitae-split-utils`
 
 ## 커밋 메시지 컨벤션
 
