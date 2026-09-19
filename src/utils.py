@@ -21,3 +21,26 @@ def unique(items):
             seen.add(item)
             result.append(item)
     return result
+
+
+def reverse_string(value: str) -> str:
+    """문자열의 문자 순서를 뒤집어 반환한다.
+
+    Example:
+        >>> reverse_string("Codyssey")
+        'yessydoC'
+    """
+    return value[::-1]
+
+
+def is_palindrome(value: str) -> bool:
+    """일반 공백과 대소문자만 무시하고 회문 여부를 반환한다.
+
+    문장부호와 탭, 줄바꿈은 비교 대상에 포함한다.
+
+    Example:
+        >>> is_palindrome("RaceCar")
+        True
+    """
+    normalized = value.replace(" ", "").lower()
+    return normalized == normalized[::-1]
