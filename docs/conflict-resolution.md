@@ -2,13 +2,13 @@
 
 이 문서는 팀이 의도적으로 만든 충돌 상황과 해결 과정을 기록합니다.
 아래 두 건은 [`docs/SCENARIO.md`](./SCENARIO.md) 8장에서 미리 설계한 시나리오입니다.
-실습을 마친 뒤 각 항목의 `TODO`를 실제 내용으로 채워주세요.
+두 충돌 실습에서 실제로 확인한 마커, 해결 절차와 관련 링크를 기록합니다.
 
 ## 충돌 기록 #1 (자명한 충돌 — add/add)
 
 ### 참여자
-- 작성자: 정인호
-- 상대: 이교원
+- 충돌 해결자: 이교원
+- 상대 변경 작성자: 정인호
 
 ### 상황(What happened)
 - `main`에 아직 `src/utils.py`가 없는 상태에서, 정인호(`feature/inho-list-utils`)와 이교원(`feature/kyowon-string-utils`)이 같은 시점에 각자 브랜치를 만들어 `src/utils.py`를 새로 추가.
@@ -16,24 +16,68 @@
 
 ### 충돌 내용(Conflict markers)
 ```txt
-TODO: 실제 발생한 충돌 마커 원문을 붙여넣으세요.
-<<<<<<< HEAD
-...
-=======
-...
->>>>>>> feature/kyowon-string-utils
+    <<<<<<< HEAD
+def reverse_string(value: str) -> str:
+    """문자열의 문자 순서를 뒤집어 반환한다.
+
+    Example:
+        >>> reverse_string("Codyssey")
+        'yessydoC'
+    """
+    return value[::-1]
+
+
+def is_palindrome(value: str) -> bool:
+    """공백과 대소문자를 무시하고 회문 여부를 반환한다.
+
+    Example:
+        >>> is_palindrome("Never odd or even")
+        True
+    """
+    normalized = value.replace(" ", "").lower()
+    return normalized == normalized[::-1]
+    =======
+def flatten(nested):
+    """중첩 리스트를 1단계 평탄화한다."""
+    result = []
+    for item in nested:
+        if isinstance(item, list):
+            result.extend(item)
+        else:
+            result.append(item)
+    return result
+
+
+def unique(items):
+    """순서를 유지하면서 중복을 제거한다."""
+    seen = set()
+    result = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            result.append(item)
+    return result
+    >>>>>>> origin/main
 ```
 
 ### 해결 과정(How)
-- 선택한 해결 전략: TODO (keep both / choose one / refactor)
-- 실제로 수행한 명령/절차: TODO (예: `git fetch origin && git merge origin/main`, 충돌 마커 직접 수정 후 `git add` → `git commit`)
+- 선택한 해결 전략: keep both (정인호의 리스트 함수와 이교원의 문자열 함수가 서로 다른 책임을 가지므로 모두 유지)
+- 실제로 수행한 명령/절차:
+  1. `git fetch origin && git merge origin/main` → `CONFLICT (add/add): Merge conflict in src/utils.py`
+  2. `git status --short`에서 `AA src/utils.py`를 확인
+  3. 충돌 마커를 제거하고 `flatten`, `unique`, `reverse_string`, `is_palindrome`을 모두 유지
+  4. 문자열 테스트 3개·doctest와 리스트 함수 스모크 테스트를 실행해 양쪽 동작 확인
+  5. `git add src/utils.py` → `git commit -m "fix: resolve add/add conflict in utils.py"` → `git push`
 
 ### 결과(Outcome)
-- 최종 병합 결과 요약: TODO
-- 관련 PR/커밋 링크: TODO
+- 최종 병합 결과 요약: 한 파일에 리스트 함수 2개와 문자열 함수 2개가 함께 유지되었고, 테스트를 통과한 뒤 `main`에 병합됨.
+- 관련 PR: [PR #16](https://github.com/B2-2-Cody/git-collab-mission/pull/16)
+- 관련 커밋: [2799131](https://github.com/B2-2-Cody/git-collab-mission/commit/27991318894f3ccc036c6af8af9e936a2feedc9a)
 
 ### 배운 점(Learnings)
-- TODO
+- 같은 기준 커밋에서 같은 경로의 파일을 서로 다르게 새로 추가하면 `add/add` 충돌이 발생한다.
+- 먼저 병합한 사람보다 나중에 최신 `main`을 자기 브랜치에 반영하는 사람이 충돌을 직접 해결한다.
+- 충돌 마커의 양쪽 내용을 비교해 서로 독립적인 기능이면 한쪽을 버리지 않고 모두 유지할 수 있으며, 해결 후에는 양쪽 기능을 함께 검증해야 한다.
 
 ---
 
@@ -75,7 +119,7 @@ TODO: 실제 발생한 충돌 마커 원문을 붙여넣으세요.
 
 ### 결과(Outcome)
 - 최종 병합 결과 요약: `src/utils.py` → `src/string_utils.py` rename이 유지되었고, docstring은 이교원이 정한 "리스트·문자열·숫자" 표현을 살리되 임시 안내 문장은 제거한 한 줄로 확정.
-- 관련 PR/커밋: 이교원 PR #19(`8ba58a6`, `ad4f813`), 박기태 rename 커밋 `0cfa982`, 충돌 해결(병합) 커밋 `15dd216`, 박기태 PR: TODO (push 후 링크 기입)
+- 관련 PR/커밋: 이교원 [PR #19](https://github.com/B2-2-Cody/git-collab-mission/pull/19)(`8ba58a6`, `ad4f813`), 박기태 rename 커밋 `0cfa982`, 충돌 해결 커밋 `15dd216`, 박기태 [PR #20](https://github.com/B2-2-Cody/git-collab-mission/pull/20)
 
 ### 배운 점(Learnings)
 - 겹치는 줄이 없으면 git이 rename을 자동 감지해 충돌 없이 병합하지만, 같은 줄을 양쪽에서 고치면 이동된 새 경로에서 충돌이 난다. 충돌이 원래 작업하던 경로가 아니라 이동된 경로에서 난다는 점을 알고 있어야 한다.
