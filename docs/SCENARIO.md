@@ -9,8 +9,8 @@
 | 이름 | 역할 | GitHub ID |
 |---|---|---|
 | 정인호 | 리드 (org 관리, branch protection, 최종 점검) | `jih19984` |
-| 이교원 | 팀원 | `<이교원 GitHub ID>` |
-| 박기태 | 팀원 | `<박기태 GitHub ID>` |
+| 이교원 | 팀원 | `kyowon1108` |
+| 박기태 | 팀원 | `SeouliteParker` |
 
 저장소: https://github.com/B2-2-Cody/git-collab-mission (Organization 저장소, 옵션 A)
 
@@ -47,9 +47,9 @@ src/
 - `main`: 항상 배포 가능한 상태 유지. 직접 push 금지, PR로만 병합.
 - `feature/<name>-<topic>`: 작업 단위 브랜치. `<name>`은 아래 영문 아이디를 사용합니다.
   - 정인호 → `inho`
-  - 이교원 → `gyowon`
+  - 이교원 → `kyowon` (GitHub ID `kyowon1108`과 통일)
   - 박기태 → `gitae`
-  - 예: `feature/inho-list-utils`, `feature/gyowon-string-utils`
+  - 예: `feature/inho-list-utils`, `feature/kyowon-string-utils`
 
 **왜 GitHub Flow인가 (README.md에도 기록)**
 - main은 항상 배포 가능한 상태를 유지해야 하기 때문
@@ -87,10 +87,10 @@ GitHub 저장소 → **Settings → Branches → Add branch ruleset (또는 Add 
 | [#4](https://github.com/B2-2-Cody/git-collab-mission/issues/4) | `[chore] Branch protection 설정` | 정인호 | `feature/inho-branch-protection` |
 | [#5](https://github.com/B2-2-Cody/git-collab-mission/issues/5) | `[docs] CONTRIBUTING.md 작성` | 정인호 | `feature/inho-contributing` |
 | [#6](https://github.com/B2-2-Cody/git-collab-mission/issues/6) | `[feat] utils.py 리스트 유틸 함수 추가` | 정인호 | `feature/inho-list-utils` |
-| [#7](https://github.com/B2-2-Cody/git-collab-mission/issues/7) | `[feat] utils.py 문자열 유틸 함수 추가` | 이교원 | `feature/gyowon-string-utils` |
+| [#7](https://github.com/B2-2-Cody/git-collab-mission/issues/7) | `[feat] utils.py 문자열 유틸 함수 추가` | 이교원 | `feature/kyowon-string-utils` |
 | [#8](https://github.com/B2-2-Cody/git-collab-mission/issues/8) | `[feat] utils.py 숫자 유틸 함수 추가` | 박기태 | `feature/gitae-math-utils` |
 | [#9](https://github.com/B2-2-Cody/git-collab-mission/issues/9) | `[refactor] utils.py를 string_utils.py로 분리` | 박기태 | `feature/gitae-split-utils` |
-| [#10](https://github.com/B2-2-Cody/git-collab-mission/issues/10) | `[docs] conflict-resolution.md 기록` | 이교원 | `feature/gyowon-conflict-doc` |
+| [#10](https://github.com/B2-2-Cody/git-collab-mission/issues/10) | `[docs] conflict-resolution.md 기록` | 이교원 | `feature/kyowon-conflict-doc` |
 | [#11](https://github.com/B2-2-Cody/git-collab-mission/issues/11) | `[docs] troubleshooting-log.md 기록` | 전원 (정인호 취합) | `feature/inho-troubleshooting-doc` |
 | [#12](https://github.com/B2-2-Cody/git-collab-mission/issues/12) | `[docs] SUBMISSION.md 인덱스 작성` | 정인호 | `feature/inho-submission` |
 
@@ -156,12 +156,14 @@ GitHub에서 PR 생성 시 아래 템플릿을 사용합니다.
 
 ## 10. 진행 순서 체크리스트
 
-- [x] 1. 저장소 스캐폴드 + SCENARIO.md 작성 — *(정인호, PR #1)*
-- [x] 2. CONTRIBUTING.md 작성 (#5) — *(정인호, PR #2)*
-- [x] 3. conflict-resolution.md / troubleshooting-log.md 템플릿 준비 (#10, #11 선행 작업) — *(정인호, PR #3)*
-- [x] 4. 이슈 #4~#12 생성 — *(정인호)*
-- [ ] 5. Org 초대 + 팀원 로컬 clone
-- [ ] 6. Branch Protection 설정 (#4) — *(팀원 합류 후에만)*
+> 체크(`[x]`)는 **PR이 main에 병합됐거나 GitHub 설정이 실제로 반영된 경우**에만 표시합니다. 문서 초안이 작성되어 PR이 열린 것만으로는 체크하지 않고 `(draft, 병합 대기)`로 표시합니다.
+
+- [ ] 1. 저장소 스캐폴드 + SCENARIO.md 작성 (#14) — *(정인호, PR #1 — draft, 병합 대기)*
+- [ ] 2. CONTRIBUTING.md 작성 (#5) — *(정인호, PR #2 — draft, 병합 대기)*
+- [ ] 3. conflict-resolution.md / troubleshooting-log.md 템플릿 준비 (#10, #11 선행 작업) — *(정인호, PR #3 — draft, 병합 대기)*
+- [x] 4. 이슈 #4~#12 생성 — *(정인호, 완료)*
+- [x] 5. Org 초대 — *(kyowon1108, SeouliteParker 합류 완료, maintain 권한 확인; 팀원 로컬 clone 여부는 각자 확인 필요)*
+- [x] 6. Branch Protection 설정 (#4) — *(완료, 이슈 close 처리됨)*
 - [ ] 7. 기능 PR 3개(#6,#7,#8) 진행 → 충돌 #1 발생/해결
 - [ ] 8. 리팩터 PR(#9) 진행 → 충돌 #2 발생/해결
 - [ ] 9. 트러블슈팅 4종 실습 + 로그 작성 (#11)
