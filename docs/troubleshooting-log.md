@@ -33,17 +33,30 @@ git commit --amend -m "docs: document amend troubleshooting scenario"
 - 이교원
 
 ### 상황
-- TODO: 로컬에서 실수로 만든 커밋 상황(재현 가능하게 설명)
+- `feature/kyowon-string-utils`에서 문자열 함수와 테스트를 작성한 뒤, 잘못된 로컬 커밋을 취소하는 상황을 재현하기 위해 임시 커밋을 생성함.
+- 임시 커밋 메시지는 `wip: temporary string utils commit`, 커밋 해시는 `f95d8d1`이었으며 원격에 push하기 전이었음.
 
 ### 시도한 명령/절차
-- TODO (예: `git reset --soft HEAD~1`)
+```bash
+git add src tests
+git commit -m "wip: temporary string utils commit"
+git log -1 --oneline
+# f95d8d1 wip: temporary string utils commit
+
+git reset --soft HEAD~1
+git status --short
+```
+- `reset --soft` 직후 커밋만 취소되고 `src/__init__.py`, `src/utils.py`, `tests/test_utils.py` 등 변경 내용이 staged 상태로 남아 있는 것을 확인함.
+- 테스트 실행 중 생성돼 함께 staged된 `__pycache__` 파일은 스테이징에서 제외하고 삭제한 뒤 정상 커밋을 다시 생성함.
 
 ### 결과
-- TODO: 커밋은 취소되고 변경 내용은 스테이징 상태로 유지됨을 확인한 과정
-- TODO: 주의할 점(이미 push된 커밋에는 사용하면 안 되는 이유 등)
+- 임시 커밋 `f95d8d1`은 현재 브랜치 히스토리에서 제거됐지만, 작성한 문자열 함수와 테스트는 삭제되지 않고 staged 상태로 유지됨.
+- 불필요한 캐시 파일을 정리한 뒤 `feat: add string utilities to utils.py` 메시지로 정상 커밋 `3c46886`을 생성하고 PR #16으로 병합함.
+- 관련 PR: [PR #16](https://github.com/B2-2-Cody/git-collab-mission/pull/16)
+- 주의할 점: `reset --soft`는 커밋만 되돌리고 변경과 staging 상태를 유지한다. 이미 원격에 push해 팀원과 공유한 커밋을 reset하면 히스토리가 어긋나므로, 공유된 커밋 취소에는 `git revert`를 사용해야 한다.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- 아직 원격에 push하지 않은 로컬 커밋이었고, 코드와 staging 상태를 보존하면서 커밋 메시지와 포함 파일을 다시 정리해야 했기 때문에 `reset --soft`를 선택함.
 
 ---
 
