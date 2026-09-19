@@ -9,17 +9,21 @@
 - 정인호
 
 ### 상황
-- TODO: 방금 커밋한 메시지에서 발견한 문제(예: 오타, 누락된 내용)를 재현 가능하게 설명
+- 이 문서(`docs/troubleshooting-log.md`)의 amend 구간을 채우고 아직 `git push`하기 전에, 방금 로컬에 만든 커밋 메시지에 오타(`dcument`)가 있는 걸 발견함. 아직 원격에 올라가지 않은 커밋이라 안전하게 고칠 수 있는 상황.
 
 ### 시도한 명령/절차
-- TODO (예: `git commit --amend -m "..."`)
+```bash
+git commit -m "docs: dcument amend troubleshooting scenario"
+# 커밋 직후 메시지 오타 발견 (dcument -> document), 아직 push 전이므로 amend로 수정
+git commit --amend -m "docs: document amend troubleshooting scenario"
+```
 
 ### 결과
-- TODO: 무엇이 어떻게 해결됐는지
-- TODO: 주의할 점(이미 push된 커밋을 amend하면 원격 히스토리와 어긋난다는 점 등)
+- `git commit --amend`는 방금 만든 커밋을 새 커밋으로 교체한다 — 해시가 바뀌지만(오타 커밋 `96bcd3d` → 수정 커밋 `b13e20c`), 파일 변경 내용은 그대로 유지된 채 메시지만 고쳐짐.
+- 주의할 점: 아직 push하지 않은 로컬 커밋에서만 안전하다. 이미 push되어 다른 사람이 pull 받은 커밋을 amend하면 해시가 바뀌어 원격/로컬 히스토리가 어긋나고, 이후 `git push --force`가 필요해진다 — 공유 브랜치에서는 지양해야 함.
 
 ### 왜 이 방법을 선택했는가(Why)
-- TODO
+- `git reset --soft`로 커밋을 풀었다가 새로 커밋해도 되지만, 메시지만 고치는 단순한 경우엔 `--amend`가 한 줄로 끝나 더 직관적이다. 아직 아무도 이 커밋을 받아가지 않은 로컬 전용 상태였기 때문에 안전 조건도 충족했다.
 
 ---
 
