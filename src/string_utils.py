@@ -67,7 +67,7 @@ def is_even(number: int) -> bool:
         >>> is_even(4)
         True
     """
-    return number % 2 == 1
+    return number % 2 == 0
 
 
 def average(numbers: list[float]) -> float:
